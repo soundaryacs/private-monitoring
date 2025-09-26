@@ -1,0 +1,32 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files:
+  # - "alert.rules"
+  # - "node.rules"
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # EC2 node exporters (dynamic discovery)
+  - job_name: 'ec2-node-exporters'
+    ec2_sd_configs:
+      - region: ${region}
+        port: 9100
+        filters:
+          - name: tag:Monitoring
+            values: ["true"]
+    relabel_configs:
+      - source_labels: [__meta_ec2_private_ip]
+        target_label: instance
+      - source_labels: [__meta_ec2_tag_Name]
+        target_label: instance_name

@@ -1,0 +1,55 @@
+{
+"id": null,
+"title": "Node System Overview (Starter)",
+"timezone": "browser",
+"schemaVersion": 38,
+"version": 1,
+"refresh": "10s",
+"panels": [
+{
+"type": "timeseries",
+"title": "CPU Usage %",
+"targets": [
+{
+"expr": "100 - (avg by(instance) (irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+"legendFormat": "{{instance}}"
+}
+],
+"gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+},
+{
+"type": "timeseries",
+"title": "Memory Used %",
+"targets": [
+{
+"expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+"legendFormat": "{{instance}}"
+}
+],
+"gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+},
+{
+"type": "timeseries",
+"title": "Root FS Used %",
+"targets": [
+{
+"expr": "(node_filesystem_size_bytes{mountpoint=\"/\",fstype!~\"tmpfs|devtmpfs\"} - node_filesystem_free_bytes{mountpoint=\"/\",fstype!~\"tmpfs|devtmpfs\"}) / node_filesystem_size_bytes{mountpoint=\"/\",fstype!~\"tmpfs|devtmpfs\"} * 100",
+"legendFormat": "{{instance}}"
+}
+],
+"gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+},
+{
+"type": "timeseries",
+"title": "Load 1m",
+"targets": [
+{
+"expr": "node_load1",
+"legendFormat": "{{instance}}"
+}
+],
+"gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+}
+],
+"templating": {"list": []}
+}
